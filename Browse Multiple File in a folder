@@ -1,0 +1,24 @@
+void OnFileOpen()
+{
+  CString strFilter = L"(*.txt)|*.txt*||";
+  CFileDialog fileDlg(TRUE,L".txt",NULL,OFN_ALLOWMULTISELECT, (LPCTSTR)strFilter);//True iFiless to open file and false is for Open Folder
+  CString str;
+  std::vector<CString> vecStrFileName;
+  int nMaxNoOfFiles = 256;
+  int nMaxFileNameSize = 256;//size of file name should not be greater than 256
+  int nBufSize = nMaxNoOfFiles * nMaxFileNameSize + 1;//To store all file names in memory
+  
+  fileDlg.GetOFN().lpstrFile = str.GetBuffer(nBufSize);
+  fileDlg.GetOFN().nMaxFile = nMaxNoOfFiles;
+  
+  if(fileDlg.DoModal() != IDOK)
+    return;
+    
+  POSITION pos(fileDlg.GetStartPosition());
+  vecStrFileName.clear();
+  while(pos)
+  {
+    CString strFileName = fileDlg.GetNextPathName(pos);
+    vecStrFileName.push_back(strFileName);
+  }
+}
